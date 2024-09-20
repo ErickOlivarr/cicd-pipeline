@@ -12,11 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Login Dockerhub
-      env:
-        DOCKER_USERNAME: erickolivarr
-        DOCKER_PASSWORD: Erick95%
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - name: Build the Docker image
       run: docker build -t cicd-pipeline .
     - name: Push to Dockerhub
