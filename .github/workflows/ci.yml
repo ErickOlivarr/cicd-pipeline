@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: login
-      run: docker login -u ErickOlivarr -p 5370864fjGLn
+      run: docker login -u erickolivarr -p 5370864fjGLn
     - name: Build the Docker image
       run: docker build -t cicd-pipeline .
     - name: Push to Dockerhub
