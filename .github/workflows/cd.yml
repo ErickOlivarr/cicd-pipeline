@@ -15,3 +15,16 @@ jobs:
     steps:
     - name: Pull Docker image
       run: echo "se va a descargar la imagen de docker desde docker hub"
+
+  buildcd2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: paralelo
+        run: echo "en paralelo con la descarga"
+
+  buildcd3:
+    needs: buildcd
+    runs-on: ubuntu-latest
+    steps:
+      - name: continuacion
+        run: echo "continuacion de la descarga"
