@@ -1,0 +1,14 @@
+name: CI Pipeline2
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  # TRABAJO 1: Se ejecuta MIENTRAS el PR está abierto
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ejecutar docker image
+        run: echo "se va a subir imagen a docker hub"
