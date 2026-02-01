@@ -2,7 +2,7 @@ name: CD PIPELINE
 
 on:
   workflow_run:
-    workflows: ["CI Pipeline"]
+    workflows: ["CI Pipeline2"]
     types:
       - completed
 
@@ -10,8 +10,8 @@ jobs:
 
   buildcd:
 
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Pull Docker image
-      run: echo "se va a subir al docker hub"
+      run: echo "se va a descargar la imagen de docker desde docker hub"
