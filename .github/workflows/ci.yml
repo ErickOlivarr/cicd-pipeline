@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [ main ]
     types: [ opened, synchronize ]
+  push:
+    branches: [ main ]
 
 jobs:
   # TRABAJO 1: Se ejecuta MIENTRAS el PR está abierto
@@ -45,3 +47,7 @@ jobs:
       - name: si algo falla
         if: failure()
         run: echo "hubo error en el checkeo del test"
+
+      - name: hacer test al push
+        if: ${{ github.event_name == 'push' }}
+        run: echo "esto se muestra al hacer el push al main solamente"
