@@ -3,12 +3,12 @@ name: CI Pipeline
 on:
   pull_request:
     branches: [ main ]
-    types: [ opened, synchronize, closed ] # Escuchamos ambos momentos
+    types: [ opened, synchronize ]
 
 jobs:
   # TRABAJO 1: Se ejecuta MIENTRAS el PR está abierto
   build:
-    if: github.event.action != 'closed' # Solo corre si NO se está cerrando
+    if: github.event_name == 'pull_request' # Solo corre si NO se está cerrando
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,7 +17,7 @@ jobs:
 
   # TRABAJO 2: Se ejecuta SOLO CUANDO se acepta el PR
   build-and-push-docker:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
