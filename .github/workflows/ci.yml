@@ -2,22 +2,24 @@ name: CI Pipeline
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
+    types: [ opened, synchronize, closed ] # Escuchamos ambos momentos
 
 jobs:
-
+  # TRABAJO 1: Se ejecuta MIENTRAS el PR está abierto
   build:
-
+    if: github.event.action != 'closed' # Solo corre si NO se está cerrando
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: login
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    - name: Build the Docker image
-      run: docker build -t erickolivarr/cicd-pipeline .
-    - name: Push to Dockerhub
-      run: docker push erickolivarr/cicd-pipeline:latest
+      - uses: actions/checkout@v4
+      - name: Ejecutar Tests
+        run: echo "holaaaaa"
+
+  # TRABAJO 2: Se ejecuta SOLO CUANDO se acepta el PR
+  build-and-push-docker:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ejecutar deploy
+        run: echo "ya se termino wow"
