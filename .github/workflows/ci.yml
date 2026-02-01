@@ -14,13 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: install dependencies
-        run: npm install
+        run: |
+          echo "estamos en la rama: $GITHUB_REF_NAME" & npm install
       - name: start app and check health
+        if: ${{ github.event_name == 'pull_request' }}
         env:
           PORT: 8080
           NODE_ENV: test
           VARIABLE_ENTORNO: erickolivarok
         run: |
+          echo "estamos en la rama: $GITHUB_REF_NAME"
           npm start &
           APP_PID=$!
 
@@ -41,13 +44,17 @@ jobs:
           echo "validacion exitosa"
           
       - name: hacer otro test
-        if: success()
+        #if: success()
+        if: ${{ github.event_name == 'pull_request' && success() }}
         run: echo "se ha completado test"
 
       - name: si algo falla
-        if: failure()
+        #if: failure()
+        if: ${{ github.event_name == 'pull_request' && failure() }}
         run: echo "hubo error en el checkeo del test"
 
       - name: hacer test al push
         if: ${{ github.event_name == 'push' }}
-        run: echo "esto se muestra al hacer el push al main solamente"
+        run: |
+          echo "estamos en la rama: $GITHUB_REF_NAME"
+          echo "esto se muestra al hacer el push al main solamente"
