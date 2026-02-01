@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Pull Docker image
-      run: sleep 5 & echo "se va a descargar la imagen de docker desde docker hub"
+      run: sleep 10 & exit 1
 
   buildcd2:
     runs-on: ubuntu-latest
@@ -23,8 +23,28 @@ jobs:
         run: echo "en paralelo con la descarga"
 
   buildcd3:
-    needs: buildcd
+    needs: [buildcd, buildcd2]
     runs-on: ubuntu-latest
     steps:
       - name: continuacion
         run: echo "continuacion de la descarga"
+
+  build4:
+    needs: [buildcd, buildcd2]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "continuacion del buildcd y buildcd2 aunque fallen"
+
+  build5:
+    needs: [buildcd]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "continuacion del buildcd si falla"
+
+  build6:
+    needs: [buildcd2]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "continuacion del buildcd2"
