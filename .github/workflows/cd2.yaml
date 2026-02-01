@@ -1,0 +1,41 @@
+name: CD PIPELINE2
+
+on:
+  workflow_run:
+    workflows: ["CD PIPELINE"]
+    types:
+      - completed
+
+jobs:
+
+  buildcd-step2:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: creacion de archivo
+      run: mkdir dist && echo "console.log('hola mundo')" > dist/index.js
+    - name: guardar el archivo
+      uses: actions/upload-artifact@v4
+      with:
+        name: mi-paquete-construido
+        path: dist
+
+  buildcd2-step2:
+    needs: buildcd-step2
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-node@v6.2.0
+      with:
+        node-version: 20
+    - name: iniciar node
+      run: npm init -y
+    - name: crear package.json
+      run: npm install
+    - name: Descargar carpeta dist
+      uses: actions/download-artifact@v4
+      with:
+        name: mi-paquete-construido
+        path: dist
+    - name: ejecutar archivo
+      run: node dist/index.js
