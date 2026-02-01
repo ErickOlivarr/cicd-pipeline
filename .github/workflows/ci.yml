@@ -11,5 +11,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Ejecutar Tests
-        run: echo "holaaaaa"
+      - name: install dependencies
+        run: npm install
+      - name: start app and check health
+        env:
+          PORT: 8080
+          NODE_ENV: test
+          VARIABLE_ENTORNO: erickolivarok
+        run: |
+          npm start &
+          APP_PID=$!
+
+          sleep 5
+
+          RESPONSE_BODY=$(curl -s http://localhost:8080/health)
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8080/health)
+
+          echo "codigo de estato http: $STATUS"
+          echo "Respuesta del servidor: $RESPONSE_BODY"
+
+          kill $APP_PID
+
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Error, el health check fallo"
+            exit 1
+          fi
+          echo "validacion exitosa"
+          
+      - name: hacer otro test
+        if: success()
+        run: echo "se ha completado test"
+
+      - name: si algo falla
+        if: failure()
+        run: echo "hubo error en el checkeo del test"
