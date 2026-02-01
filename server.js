@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 app.get('/', (req, res) => {
@@ -8,7 +9,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-    res.status(200).send('OK');
+    const v = process.env.VARIABLE_ENTORNO || 'no hay variable';
+    res.status(200).send(`OK ${v}`);
 });
 app.listen(8080, () => {
     console.log('server running on port 8080 listo pruebaaa ok final vamos aaaaafrrefref ahora siiii wowwww la prueba yaaaaa ahora con 3 pipelines');
